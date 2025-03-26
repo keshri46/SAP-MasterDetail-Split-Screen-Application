@@ -1,0 +1,41 @@
+<mvc:View controllerName="masterdetails.controller.MasterDetail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+    <SplitApp id="SplitAppDemo" initialDetail="detail" initialMaster="master">
+        <detailPages>
+            <Page id="detail" title="OrderID - 1" backgroundDesign= "Solid">
+                <Label text="OrderID - 1 Details" />
+            </Page>
+            <Page id="detailpage" title="{i18n>orderdetails}" showNavButton="true" navButtonPress="onNavToApp" showHeader="true" models="oFormModel">
+                <customHeader>
+                    <Bar>
+                        <contentRight>
+                            <Button id="edit" text="Edit" press="handleEditPress" />
+                            <Button id="save" text="Save" type="Emphasized" visible="false" press="handleSavePress" />
+                            <Button id="cancel" text="Cancel" visible="false" press="handleCancelPress" />
+                        </contentRight>
+                    </Bar>
+                </customHeader>
+            </Page>
+        </detailPages>
+        <masterPages>
+            <Page id="master" title="Master OrderDetails" backgroundDesign= "List">
+                <List>
+                    <StandardListItem title="Orders" type="Navigation" press=".onPressGoToOrderMaster" />
+                    <StandardListItem title="Customers" type="Navigation" press=".onPressGoToCustomerMaster" />
+                    <StandardListItem title="Products" type="Navigation" press=".onPressGoToProductMaster" />
+                    <StandardListItem title="Suppliers" type="Navigation" press=".onPressGoToSupplierMaster" />
+                    <StandardListItem title="Shippers" type="Navigation" press=".onPressGoToShipperMaster" />
+                </List>
+            </Page>
+            <Page id="ordermaster" title="Orders" backgroundDesign="List" showNavButton="true" navButtonPress=".onPressMasterBack">
+                <List items="{OrdersModel>/}">
+                    <items>
+                        <StandardListItem title="{OrdersModel>OrderID}" type="Navigation" press=".onListItemPress" />
+                    </items>
+                </List>
+            </Page>
+        </masterPages>
+    </SplitApp>
+</mvc:View>
