@@ -1,6 +1,7 @@
 <core:FragmentDefinition xmlns="sap.m"
 	xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form"
+	xmlns:formatter="masterdetails.util.Formatter"
 	xmlns:core="sap.ui.core">
 	<VBox class="sapUiSmallMargin">
 		<f:Form editable="false">
@@ -52,7 +53,6 @@
 				</f:FormContainer>
 				<f:FormContainer title="Shipment Details">
 					<f:formElements>
-
 						<f:FormElement label="Ship Name">
 							<f:fields>
 								<Text text="{oFormModel>ShipName}" />
@@ -87,5 +87,47 @@
 				</f:FormContainer>
 			</f:formContainers>
 		</f:Form>
+	</VBox>
+	<VBox>
+		<Table id="idItemsTable" growing="true" mode="SingleSelectLeft" alternateRowColors="true" growingScrollToLoad="true" sticky="ColumnHeaders,HeaderToolbar,InfoToolbar" inset="false" items="{OrdersProductModel[0]>Products/}">
+			<headerToolbar>
+				<Toolbar>
+					<Title id="itemTableTitle" text="Items" level="H2" />
+					<ToolbarSpacer />
+				</Toolbar>
+			</headerToolbar>
+			<!-- <infoToolbar>
+				<OverflowToolbar>
+					<Label text="{i18n>POList}" />
+				</OverflowToolbar>
+			</infoToolbar> -->
+			<columns>
+				<Column width="10em" hAlign="Begin">
+					<Text text="Product" />
+				</Column>
+				<Column hAlign="Begin">
+					<Text text="Quantity" />
+				</Column>
+				<Column hAlign="Begin">
+					<Text text="Discount" />
+				</Column>
+				<Column hAlign="Begin">
+					<Text text="Unit Price" />
+				</Column>
+				<!-- <Column hAlign="Begin">
+					<Text text="Actions" />
+				</Column> -->
+			</columns>
+			<items>
+				<ColumnListItem vAlign="Middle" press="open" type="Active">
+					<cells>
+						<Label text="{ProductName}"></Label>
+						<Label text="{Quantity}"></Label>
+						<Label text="{Discount}"></Label>
+						<Label text="{UnitPrice}"></Label>
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
 	</VBox>
 </core:FragmentDefinition>

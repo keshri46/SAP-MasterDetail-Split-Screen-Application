@@ -4,9 +4,6 @@
     xmlns="sap.m">
     <SplitApp id="SplitAppDemo" initialDetail="detail" initialMaster="master">
         <detailPages>
-            <Page id="detail" title="OrderID - 1" backgroundDesign= "Solid">
-                <Label text="OrderID - 1 Details" />
-            </Page>
             <Page id="detailpage" title="{i18n>orderdetails}" showNavButton="true" navButtonPress="onNavToApp" showHeader="true" models="oFormModel">
                 <customHeader>
                     <Bar>
@@ -32,7 +29,35 @@
             <Page id="ordermaster" title="Orders" backgroundDesign="List" showNavButton="true" navButtonPress=".onPressMasterBack">
                 <List items="{OrdersModel>/}">
                     <items>
-                        <StandardListItem title="{OrdersModel>OrderID}" type="Navigation" press=".onListItemPress" />
+                        <StandardListItem title="{OrdersModel>OrderID}" type="Navigation" press=".onListItemOrderPress" />
+                    </items>
+                </List>
+            </Page>
+            <Page id="customermaster" title="Customers" backgroundDesign="List" showNavButton="true" navButtonPress=".onPressMasterBack">
+                <List items="{CustomersModel>/}">
+                    <items>
+                        <StandardListItem title="{CustomersModel>CustomerID}" type="Navigation" press=".onListItemCustomerPress" />
+                    </items>
+                </List>
+            </Page>
+            <Page id="productmaster" title="Products" backgroundDesign="List" showNavButton="true" navButtonPress=".onPressMasterBack">
+                <List items="{ProductsModel>/}">
+                    <items>
+                        <StandardListItem title="{ProductsModel>ProductID}" type="Navigation" press=".onListItemProductPress" />
+                    </items>
+                </List>
+            </Page>
+            <Page id="shippermaster" title="Shippers" backgroundDesign="List" showNavButton="true" navButtonPress=".onPressMasterBack">
+                <List items="{ShippersModel>/}">
+                    <items>
+                        <StandardListItem title="{ShippersModel>ShipperID}" type="Navigation" press=".onListItemShipperPress" />
+                    </items>
+                </List>
+            </Page>
+            <Page id="suppliermaster" title="Suppliers" backgroundDesign="List" showNavButton="true" navButtonPress=".onPressMasterBack">
+                <List items="{SuppliersModel>/}">
+                    <items>
+                        <StandardListItem title="{SuppliersModel>SupplierID}" type="Navigation" press=".onListItemSupplierPress" />
                     </items>
                 </List>
             </Page>

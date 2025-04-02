@@ -28,12 +28,30 @@ sap.ui.define([
             that.i18nBundle = that.getOwnerComponent().getModel("i18n").getResourceBundle();
             //oView.byId("tabTitle").setText(that.i18nBundle.getText("purOrder", 0));
 
-            // Model for the search data
+            // Model for the data
             var oOrdersModel = new JSONModel();
             oView.setModel(oOrdersModel, "OrdersModel");
 
-            var oFormModel = new JSONModel([]);
+            var oFormModel = new JSONModel();
             oView.setModel(oFormModel, "oFormModel");
+
+            var oCustomersModel = new JSONModel([]);
+            oView.setModel(oCustomersModel, "CustomersModel");
+
+            var oProductsModel = new JSONModel([]);
+            oView.setModel(oProductsModel, "ProductsModel");
+
+            var oSuppliersModel = new JSONModel([]);
+            oView.setModel(oSuppliersModel, "SuppliersModel");
+
+            var oShippersModel = new JSONModel([]);
+            oView.setModel(oShippersModel, "ShippersModel");
+
+            var oOrdersDetailsModel = new JSONModel([]);
+            oView.setModel(oOrdersDetailsModel, "OrdersDetailsModel");
+
+            var oOrdersProductModel = new JSONModel();
+            oView.setModel(oOrdersProductModel, "OrdersProductModel");
 
             this.aSearchFields = [
                 "CustomerID",
@@ -53,7 +71,15 @@ sap.ui.define([
             that.loadNorthwindData();
         },
         loadNorthwindData: function () {
-            // debugger;
+            that.loadAllOrders();
+            that.loadAllCustomers();
+            that.loadAllProducts();
+            that.loadAllSuppliers();
+            that.loadAllShippers();
+            that.loadAllOrdersDetail();
+        },
+        loadAllOrders: function () {
+            // // debugger;
             var oModel = that.getOwnerComponent().getModel();
             var sPath = "/Orders";
             var oBusyDialog = new BusyDialog();
@@ -61,7 +87,6 @@ sap.ui.define([
             oModel.read(sPath, {
                 success: function (oData) {
                     console.log("Success");
-                    console.log(oData);
                     let res = oData.results.map(function (val) {
                         val.OrderID = String(val.OrderID);
                         val.ShipVia = String(val.ShipVia);
@@ -69,6 +94,8 @@ sap.ui.define([
                         val.isNew = false;
                         return val;
                     });
+                    console.log("Orders ", res[0]);
+                    that.allOrders = oData.results;
                     oView.getModel("oFormModel").setData(oData.results);
                     oView.getModel("oFormModel").refresh();
                     // oView.byId("tabTitle").setText(that.i18nBundle.getText("purOrder", res.length));
@@ -86,10 +113,143 @@ sap.ui.define([
                 }
             });
         },
+        loadAllCustomers: function () {
+            // // debugger;
+            var oModel = that.getOwnerComponent().getModel();
+            var sPath = "/Customers";
+            oModel.read(sPath, {
+                success: function (oData) {
+                    console.log("Success");
+                    console.log("Customers", oData.results[0]);
+                    oView.getModel("CustomersModel").setData(oData.results);
+                    oView.getModel("CustomersModel").setSizeLimit(1000);
+                    oView.getModel("CustomersModel").refresh();
+                    // oView.byId("tabTitle").setText(that.i18nBundle.getText("purOrder", res.length));
+                    // that.currentOrderPath = 0;
+                    // that.currentOrder = oView.getModel("oFormModel").getData()[0];
+                },
+                error: function (oerror) {
+                    console.log("error");
+                }
+            });
+        },
+        loadAllProducts: function () {
+            var oModel = that.getOwnerComponent().getModel();
+            var sPath = "/Products";
+            oModel.read(sPath, {
+                success: function (oData) {
+                    console.log("Success");
+                    console.log("Products", oData.results[0])
+                    that.allProductsDetails = oData.results;
+                    oView.getModel("ProductsModel").setData(oData.results);
+                    oView.getModel("ProductsModel").setSizeLimit(1000);
+                    oView.getModel("ProductsModel").refresh();
+                    // oView.byId("tabTitle").setText(that.i18nBundle.getText("purOrder", res.length));
+                    // that.currentOrderPath = 0;
+                    // that.currentOrder = oView.getModel("oFormModel").getData()[0];            
+                },
+                error: function (oerror) {
+                    console.log("error");
+                }
+            });
+        },
+        loadAllShippers: function () {
+            var oModel = that.getOwnerComponent().getModel();
+            var sPath = "/Shippers";
+            oModel.read(sPath, {
+                success: function (oData) {
+                    console.log("Success");
+                    console.log("Shippers", oData.results[0])
+                    oView.getModel("ShippersModel").setData(oData.results);
+                    oView.getModel("ShippersModel").setSizeLimit(1000);
+                    oView.getModel("ShippersModel").refresh();
+                    // oView.byId("tabTitle").setText(that.i18nBundle.getText("purOrder", res.length));
+                    // that.currentOrderPath = 0;
+                    // that.currentOrder = oView.getModel("oFormModel").getData()[0];            
+                },
+                error: function (oerror) {
+                    console.log("error");
+                }
+            });
+        },
+        loadAllSuppliers: function () {
+            var oModel = that.getOwnerComponent().getModel();
+            var sPath = "/Suppliers";
+            oModel.read(sPath, {
+                success: function (oData) {
+                    console.log("Success");
+                    console.log("Suppliers", oData.results)
+                    oView.getModel("SuppliersModel").setData(oData.results);
+                    oView.getModel("SuppliersModel").setSizeLimit(1000);
+                    oView.getModel("SuppliersModel").refresh();
+                    // oView.byId("tabTitle").setText(that.i18nBundle.getText("purOrder", res.length));
+                    // that.currentOrderPath = 0;
+                    // that.currentOrder = oView.getModel("oFormModel").getData()[0];            
+                },
+                error: function (oerror) {
+                    console.log("error");
+                }
+            });
+        },
+        loadAllOrdersDetail: function () {
+            var oModel = that.getOwnerComponent().getModel();
+            var sPath = "/Order_Details";
+            oModel.read(sPath, {
+                success: function (oData) {
+                    console.log("Success");
+                    console.log("OrdersDetail", oData.results[0])
+                    that.allOrdersDetails = oData.results;
+                    oView.getModel("OrdersDetailsModel").setData(oData.results);
+                    oView.getModel("OrdersDetailsModel").setSizeLimit(1000);
+                    oView.getModel("OrdersDetailsModel").refresh();
+                    // oView.byId("tabTitle").setText(that.i18nBundle.getText("purOrder", res.length));
+                    // that.currentOrderPath = 0;
+                    // that.currentOrder = oView.getModel("oFormModel").getData()[0];            
+                },
+                error: function (oerror) {
+                    console.log("error");
+                }
+            });
+        },
+        addOrdersProduct: function () {
+            var addProducts = function (order) {
+                // console.log("in addProducts : order : ", order);
+
+                var orderId = order.OrderID;
+                var checkOrder = function (orderd) {
+                    // console.log("in checkOrder : orderd : ", orderd);
+                    return orderd.OrderID == orderId;
+                };
+                var orderProducts = that.allOrdersDetails.filter(checkOrder).map(function name(order) {
+                    var productId = order.ProductID;
+                    console.log(" allOrdersDetails.filter : ", order);
+                    // debugger;
+                    var products = that.allProductsDetails.filter(function checkProduct(product) {
+                        // debugger;
+                        return product.ProductID == productId;
+                    });
+                    console.log(" allOrdersDetails.filter : products", products);
+                    if (products[0]){
+                        order.ProductName = products[0].ProductName;
+                    }
+                    return order;
+                });
+                // console.log("in addProducts : orderProducts : ",orderProducts);
+                return {
+                    "OrderID": orderId,
+                    "Products": orderProducts
+                }
+            };
+            var ordersProduct = that.allOrders.map(addProducts);
+            console.log("in addOrdersProduct : ordersProduct : ", ordersProduct);
+            oView.getModel("OrdersProductModel").setData(ordersProduct);
+            oView.getModel("OrdersProductModel").setSizeLimit(1000);
+            oView.getModel("OrdersProductModel").refresh();
+        },
         bindElement: function () {
             // oView.byId("FormDisplay354wideDual").setModel(oView.getModel("oFormModel"));
             // oView.byId("FormDisplay354wideDual").bindElement({ path: "/"+that.currentOrderPath, model: "oFormModel" });
-            // debugger;
+            // // debugger;
             this.getSplitAppObj().toDetail(this.createId("detailpage"));
             that.detailPageView = this.getView().byId("detailpage");
             that.detailPageView.setTitle("OrderID - " + that.currentOrder.OrderID);
@@ -108,24 +268,25 @@ sap.ui.define([
             this._showFormFragment("Display");
         },
         onPressGoToOrderMaster: function () {
+            that.addOrdersProduct();
             this.getSplitAppObj().toMaster(this.createId("ordermaster"));
         },
-        onPressGoToCustomerMaster : function () {
-            // this.getSplitAppObj().toMaster(this.createId("ordermaster"));
+        onPressGoToCustomerMaster: function () {
+            this.getSplitAppObj().toMaster(this.createId("customermaster"));
         },
-        onPressGoToProductMaster : function () {
-            // this.getSplitAppObj().toMaster(this.createId("ordermaster"));
+        onPressGoToProductMaster: function () {
+            this.getSplitAppObj().toMaster(this.createId("productmaster"));
         },
-        onPressGoToSupplierMaster : function () {
-            // this.getSplitAppObj().toMaster(this.createId("ordermaster"));
+        onPressGoToSupplierMaster: function () {
+            this.getSplitAppObj().toMaster(this.createId("shippermaster"));
         },
-        onPressGoToShipperMaster : function () {
-            // this.getSplitAppObj().toMaster(this.createId("ordermaster"));
+        onPressGoToShipperMaster: function () {
+            this.getSplitAppObj().toMaster(this.createId("suppliermaster"));
         },
         onPressMasterBack: function () {
             this.getSplitAppObj().backMaster();
         },
-        onListItemPress: function (oEvent) {
+        onListItemOrderPress: function (oEvent) {
             var oSelectedItem = oEvent.getSource();
             var oContext = oSelectedItem.getBindingContext("OrdersModel");
 
@@ -156,7 +317,131 @@ sap.ui.define([
 
             that.displayOrderDetails();
         },
-        displayOrderDetails : function(){
+        onListItemCustomerPress: function (oEvent) {
+            // var oSelectedItem = oEvent.getSource();
+            // var oContext = oSelectedItem.getBindingContext("OrdersModel");
+
+            // var sPath = oContext.getPath();
+            // var oSelectedOrder = oContext.getModel().getProperty(sPath);
+
+            // var sPath2 = oSelectedItem.getBindingContextPath();
+            // var oSelectedOrder2 = oView.getModel("OrdersModel").getProperty(sPath);
+
+            // that.currentOrderPath = sPath2.replace('/', '');
+            // that.currentOrder = oSelectedOrder2;
+
+            // console.log(oSelectedItem);
+            // console.log(oContext);
+            // console.log(sPath);
+            // console.log(oSelectedOrder);
+            // console.log(sPath2);
+            // console.log(oSelectedOrder2);
+
+            // Now, you have the selected order's data (oSelectedOrder).
+            // Navigate to the detail page and pass the order data.
+            //this.getSplitAppObj().toDetail(this.createId("detail"));
+            //You can pass the data to the detail page here, for example by setting it to a model
+            //var oDetailModel = new JSONModel(oSelectedOrder);
+            //this.getView().byId("detail").setModel(oDetailModel, "detailModel");
+            //this.getView().byId("detail").setTitle("OrderID - " + oSelectedOrder.OrderID);
+            //this.getView().byId("detail").getContent()[0].setText(JSON.stringify(oSelectedOrder.CustomerID));
+
+            // that.displayOrderDetails();
+        },
+        onListItemProductPress: function (oEvent) {
+            // var oSelectedItem = oEvent.getSource();
+            // var oContext = oSelectedItem.getBindingContext("OrdersModel");
+
+            // var sPath = oContext.getPath();
+            // var oSelectedOrder = oContext.getModel().getProperty(sPath);
+
+            // var sPath2 = oSelectedItem.getBindingContextPath();
+            // var oSelectedOrder2 = oView.getModel("OrdersModel").getProperty(sPath);
+
+            // that.currentOrderPath = sPath2.replace('/', '');
+            // that.currentOrder = oSelectedOrder2;
+
+            // console.log(oSelectedItem);
+            // console.log(oContext);
+            // console.log(sPath);
+            // console.log(oSelectedOrder);
+            // console.log(sPath2);
+            // console.log(oSelectedOrder2);
+
+            // Now, you have the selected order's data (oSelectedOrder).
+            // Navigate to the detail page and pass the order data.
+            //this.getSplitAppObj().toDetail(this.createId("detail"));
+            //You can pass the data to the detail page here, for example by setting it to a model
+            //var oDetailModel = new JSONModel(oSelectedOrder);
+            //this.getView().byId("detail").setModel(oDetailModel, "detailModel");
+            //this.getView().byId("detail").setTitle("OrderID - " + oSelectedOrder.OrderID);
+            //this.getView().byId("detail").getContent()[0].setText(JSON.stringify(oSelectedOrder.CustomerID));
+
+            // that.displayOrderDetails();
+        },
+        onListItemSupplierPress: function (oEvent) {
+            // var oSelectedItem = oEvent.getSource();
+            // var oContext = oSelectedItem.getBindingContext("OrdersModel");
+
+            // var sPath = oContext.getPath();
+            // var oSelectedOrder = oContext.getModel().getProperty(sPath);
+
+            // var sPath2 = oSelectedItem.getBindingContextPath();
+            // var oSelectedOrder2 = oView.getModel("OrdersModel").getProperty(sPath);
+
+            // that.currentOrderPath = sPath2.replace('/', '');
+            // that.currentOrder = oSelectedOrder2;
+
+            // console.log(oSelectedItem);
+            // console.log(oContext);
+            // console.log(sPath);
+            // console.log(oSelectedOrder);
+            // console.log(sPath2);
+            // console.log(oSelectedOrder2);
+
+            // Now, you have the selected order's data (oSelectedOrder).
+            // Navigate to the detail page and pass the order data.
+            //this.getSplitAppObj().toDetail(this.createId("detail"));
+            //You can pass the data to the detail page here, for example by setting it to a model
+            //var oDetailModel = new JSONModel(oSelectedOrder);
+            //this.getView().byId("detail").setModel(oDetailModel, "detailModel");
+            //this.getView().byId("detail").setTitle("OrderID - " + oSelectedOrder.OrderID);
+            //this.getView().byId("detail").getContent()[0].setText(JSON.stringify(oSelectedOrder.CustomerID));
+
+            // that.displayOrderDetails();
+        },
+        onListItemShipperPress: function (oEvent) {
+            // var oSelectedItem = oEvent.getSource();
+            // var oContext = oSelectedItem.getBindingContext("OrdersModel");
+
+            // var sPath = oContext.getPath();
+            // var oSelectedOrder = oContext.getModel().getProperty(sPath);
+
+            // var sPath2 = oSelectedItem.getBindingContextPath();
+            // var oSelectedOrder2 = oView.getModel("OrdersModel").getProperty(sPath);
+
+            // that.currentOrderPath = sPath2.replace('/', '');
+            // that.currentOrder = oSelectedOrder2;
+
+            // console.log(oSelectedItem);
+            // console.log(oContext);
+            // console.log(sPath);
+            // console.log(oSelectedOrder);
+            // console.log(sPath2);
+            // console.log(oSelectedOrder2);
+
+            // Now, you have the selected order's data (oSelectedOrder).
+            // Navigate to the detail page and pass the order data.
+            //this.getSplitAppObj().toDetail(this.createId("detail"));
+            //You can pass the data to the detail page here, for example by setting it to a model
+            //var oDetailModel = new JSONModel(oSelectedOrder);
+            //this.getView().byId("detail").setModel(oDetailModel, "detailModel");
+            //this.getView().byId("detail").setTitle("OrderID - " + oSelectedOrder.OrderID);
+            //this.getView().byId("detail").getContent()[0].setText(JSON.stringify(oSelectedOrder.CustomerID));
+
+            // that.displayOrderDetails();
+        },
+        displayOrderDetails: function () {
             this.getView().byId("detailpage").setTitle("OrderID - " + that.currentOrder.OrderID);
 
             that.detailPageView.unbindElement();
@@ -207,7 +492,7 @@ sap.ui.define([
             // Implement the action when a table item is pressed
         },
         handleEditPress: function () {
-            debugger;
+            //// debugger;
             //Clone the data
             var oModel = oView.getModel("oFormModel");
             var oData = oModel.getData();
@@ -217,7 +502,7 @@ sap.ui.define([
 
         },
         handleCancelPress: function () {
-            debugger;
+            // debugger;
             //Restore the data
             var oModel = oView.getModel("oFormModel");
             var oData = oModel.getData();
@@ -226,11 +511,11 @@ sap.ui.define([
             this._toggleButtonsAndView(false);
         },
         handleSavePress: function () {
-            debugger;
+            // debugger;
             this._toggleButtonsAndView(false);
         },
         _toggleButtonsAndView: function (bEdit) {
-            debugger;
+            // debugger;
             var oView = this.getView();
 
             // Show the appropriate action buttons
@@ -242,10 +527,10 @@ sap.ui.define([
             this._showFormFragment(bEdit ? "Change" : "Display");
         },
         _getFormFragment: function (sFragmentName) {
-            debugger;
+            // debugger;
             var pFormFragment = this._formFragments[sFragmentName],
                 oView = this.getView();
-            debugger;
+            // debugger;
             if (!pFormFragment) {
                 pFormFragment = Fragment.load({
                     id: oView.getId(),
@@ -253,11 +538,11 @@ sap.ui.define([
                 });
                 this._formFragments[sFragmentName] = pFormFragment;
             }
-            debugger;
+            // debugger;
             return pFormFragment;
         },
         _showFormFragment: function (sFragmentName) {
-            debugger;
+            // debugger;
             var oPage = this.byId("detailpage");
 
             oPage.removeAllContent();
